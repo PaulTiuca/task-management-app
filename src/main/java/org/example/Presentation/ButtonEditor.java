@@ -1,4 +1,6 @@
-package org.example;
+package org.example.Presentation;
+
+import org.example.Business.Controller;
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,13 +9,13 @@ public class ButtonEditor extends DefaultCellEditor {
     private JButton button;
     private JTable table;
     private boolean isClicked;
-    private TasksManagement tasksManagement;
+    private Controller controller;
     private EmployeeTablePanel employeeTablePanel;
 
-    public ButtonEditor(JCheckBox checkBox, JTable table, TasksManagement tasksManagement, EmployeeTablePanel employeeTablePanel) {
+    public ButtonEditor(JCheckBox checkBox, JTable table, Controller controller, EmployeeTablePanel employeeTablePanel) {
         super(checkBox);
         this.table = table;
-        this.tasksManagement = tasksManagement;
+        this.controller = controller;
         this.employeeTablePanel = employeeTablePanel;
         button = new JButton();
         button.setOpaque(true);
@@ -35,7 +37,7 @@ public class ButtonEditor extends DefaultCellEditor {
             if(selectedRow != -1) {
                 int employeeId = (int) table.getValueAt(selectedRow,0);
 
-                new EmployeeTasksWindow(employeeId,tasksManagement,employeeTablePanel);
+                new EmployeeTasksWindow(employeeId,controller,employeeTablePanel);
             }
         }
         isClicked = false;

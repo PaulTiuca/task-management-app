@@ -1,33 +1,39 @@
-package org.example;
+package org.example.Presentation;
+
+import org.example.Business.Controller;
+import org.example.Data_Models.*;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class EmployeeTasksWindow extends JFrame {
     private JTree taskTree;
     private JButton completeTaskButton;
     private JButton removeTaskButton;
     private DefaultTreeModel treeModel;
-    private TasksManagement tasksManagement;
+    private Controller controller;
     private EmployeeTablePanel employeeTablePanel;
     private Employee selectedEmployee;
+    private HashMap<Employee, ArrayList<Task>> employeeTaskMap;
 
-    public EmployeeTasksWindow(int employeeId, TasksManagement tasksManagement, EmployeeTablePanel employeeTablePanel) {
-        this.tasksManagement = tasksManagement;
+    public EmployeeTasksWindow(int employeeId, Controller controller, EmployeeTablePanel employeeTablePanel) {
+        this.controller = controller;
         this.employeeTablePanel = employeeTablePanel;
+        this.employeeTaskMap = controller.getEmployeeTaskMap();
         this.setTitle("Employee Tasks");
         this.setSize(500, 500);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setLayout(new BorderLayout());
 
-        selectedEmployee = tasksManagement.findEmployeeById(employeeId);
+        selectedEmployee = controller.findEmployeeById(employeeId);
 
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Tasks");
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode(selectedEmployee.getName() + "'s Tasks");
 
-        for (Task task : tasksManagement.getMap().get(selectedEmployee)) {
+        for (Task task : employeeTaskMap.get(selectedEmployee)) {
             addTaskToTree(root, task);
         }
 
@@ -52,12 +58,12 @@ public class EmployeeTasksWindow extends JFrame {
         });
 
         completeTaskButton = new JButton("Complete Task");
-        App.configureButton(completeTaskButton);
+        AppUtility.configureButton(completeTaskButton);
         completeTaskButton.setEnabled(false);
         completeTaskButton.addActionListener(e -> markSelectedTaskAsCompleted());
 
         removeTaskButton = new JButton("Remove Task");
-        App.configureButton(removeTaskButton);
+        AppUtility.configureButton(removeTaskButton);
         removeTaskButton.setEnabled(false);
         removeTaskButton.addActionListener(e -> removeSelectedTask());
 
@@ -73,14 +79,14 @@ public class EmployeeTasksWindow extends JFrame {
         DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) taskTree.getLastSelectedPathComponent();
 
         if (selectedNode != null && selectedNode.getUserObject() instanceof SimpleTask selectedTask) {
-            tasksManagement.modifyTaskStatus(selectedTask);
+            controller.modifyTaskStatus(selectedTask);
 
             treeModel.nodeChanged(selectedNode);
 
             taskTree.revalidate();
             taskTree.repaint();
 
-            ArrayList<Employee> employees = new ArrayList<>(tasksManagement.getMap().keySet());
+            ArrayList<Employee> employees = new ArrayList<>(employeeTaskMap.keySet());
             employeeTablePanel.loadEmployeeData(employees);
 
             if(selectedTask.isCompleted())
@@ -106,11 +112,11 @@ public class EmployeeTasksWindow extends JFrame {
             return;
         }
 
-        tasksManagement.removeTask(selectedTask);
+        controller.removeTask(selectedTask);
 
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Tasks");
 
-        for (Task task : tasksManagement.getMap().get(selectedEmployee)) {
+        for (Task task : employeeTaskMap.get(selectedEmployee)) {
             addTaskToTree(rootNode, task);
         }
 
@@ -120,7 +126,7 @@ public class EmployeeTasksWindow extends JFrame {
         taskTree.revalidate();
         taskTree.repaint();
 
-        ArrayList<Employee> employees = new ArrayList<>(tasksManagement.getMap().keySet());
+        ArrayList<Employee> employees = new ArrayList<>(employeeTaskMap.keySet());
         employeeTablePanel.loadEmployeeData(employees);
     }
 }

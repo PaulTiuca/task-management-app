@@ -1,15 +1,25 @@
-package org.example;
+package org.example.Business;
 
+import org.example.Data_Models.ComplexTask;
+import org.example.Data_Models.Employee;
+import org.example.Data_Models.SimpleTask;
+import org.example.Data_Models.Task;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class TasksManagement {
+public class TasksManagement implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private HashMap<Employee, ArrayList<Task>> map;
     private ArrayList<Task> unassignedTasks;
+    private int lastEmployeeId;
 
     public TasksManagement(){
         this.map = new HashMap<>();
         unassignedTasks = new ArrayList<>();
+        lastEmployeeId = 1;
     }
 
     public void assignTaskToEmployee(Employee employee, Task task){
@@ -64,7 +74,7 @@ public class TasksManagement {
         ComplexTask parentTask = (ComplexTask) deletedTask.getParentTask();
 
         if(parentTask != null) {
-            parentTask.getIncludedTasks().remove(deletedTask);
+            parentTask.deleteTask(deletedTask);
 
             if (parentTask.getIncludedTasks().isEmpty()) {
                 removeTask(parentTask);
@@ -88,38 +98,23 @@ public class TasksManagement {
 
     public void addEmployee(String name){
         map.put(new Employee(name),new ArrayList<>());
+        lastEmployeeId++;
     }
 
-    public boolean isEmployeeValid(String employeeName){
-        if(employeeName.isBlank())
-            return false;
-        return true;
-    }
+    public void removeEmployee(int employeeId){
+        Employee deletedEmployee = findEmployeeById(employeeId);
 
-    public boolean isSimpleTaskValid(String taskName, String startHourText, String endHourText){
-        if(taskName.isBlank() || startHourText.isBlank() || endHourText.isBlank())
-            return false;
-
-        try{
-            int startHour = Integer.parseInt(startHourText);
-            int endHour = Integer.parseInt(endHourText);
-
-            if(startHour < 0 || startHour > 24 || endHour < 0 || endHour > 24 || startHour >= endHour)
-                return false;
-
-        }
-        catch(NumberFormatException e) {
-            return false;
+        ArrayList<Task> tasks = map.get(deletedEmployee);
+        if(tasks != null){
+            for(Task task : tasks)
+                removeTask(task);
         }
 
-        return true;
+        map.remove(deletedEmployee);
     }
 
-    public boolean isComplexTaskValid(String taskName, ArrayList<Task> includedTasks){
-        if(taskName.isBlank() || includedTasks.isEmpty())
-            return false;
-
-        return true;
+    public void setStartingEmployeeId(){
+        Employee.setIdGenerator(lastEmployeeId);
     }
 
     public ArrayList<Task> getUnassignedTasks() {

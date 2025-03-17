@@ -1,4 +1,7 @@
-package org.example;
+package org.example.Presentation;
+
+import org.example.Business.Controller;
+import org.example.Data_Models.Task;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,14 +14,14 @@ public class CreateTaskPanel extends JPanel {
     private JTextField endHourField;
     private JTextField descriptionField;
     private JTextField complexTaskNameField;
-    private TasksManagement tasksManagement;
+    private Controller controller;
     private DefaultListModel<Task> selectedTasksModel;
     private JList<Task> selectedTasksList;
     private JComboBox<Task> taskComboBox;
 
 
-    public CreateTaskPanel(MainFrame parentFrame, TasksManagement tasksManagement) {
-        this.tasksManagement = tasksManagement;
+    public CreateTaskPanel(MainFrame parentFrame, Controller controller) {
+        this.controller = controller;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         JPanel taskTypePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -40,13 +43,13 @@ public class CreateTaskPanel extends JPanel {
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
         JButton createTaskButton = new JButton("Create Task");
-        App.configureButton(createTaskButton);
+        AppUtility.configureButton(createTaskButton);
         createTaskButton.addActionListener(e -> {
             createTask();
         });
 
         JButton backButton = new JButton("Back to Main Menu");
-        App.configureButton(backButton);
+        AppUtility.configureButton(backButton);
         backButton.addActionListener(e -> parentFrame.switchToMainPanel());
 
         buttonPanel.add(createTaskButton);
@@ -112,7 +115,7 @@ public class CreateTaskPanel extends JPanel {
         complexTaskNameField = new JTextField();
         complexTaskNameField.setMaximumSize(new Dimension(200, 30));
 
-        ArrayList<Task> availableTasks = tasksManagement.getUnassignedTasks();
+        ArrayList<Task> availableTasks = controller.getUnassignedTasks();
         DefaultComboBoxModel<Task> taskComboBoxModel = new DefaultComboBoxModel<>();
         for (Task task : availableTasks) {
             taskComboBoxModel.addElement(task);
@@ -128,7 +131,7 @@ public class CreateTaskPanel extends JPanel {
 
         JButton addTaskButton = new JButton("Add Sub-Task");
         addTaskButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        App.configureButton(addTaskButton);
+        AppUtility.configureButton(addTaskButton);
         addTaskButton.addActionListener(e -> {
             Task selectedTask = (Task) taskComboBox.getSelectedItem();
             if (selectedTask != null && !selectedTasksModel.contains(selectedTask)) {
@@ -153,10 +156,10 @@ public class CreateTaskPanel extends JPanel {
             String startHourText = startHourField.getText().trim();
             String endHourText = endHourField.getText().trim();
 
-            if(tasksManagement.isSimpleTaskValid(taskName,startHourText,endHourText)){
+            if(controller.isSimpleTaskValid(taskName,startHourText,endHourText)){
                 int startHour = Integer.parseInt(startHourText);
                 int endHour = Integer.parseInt(endHourText);
-                tasksManagement.createTask(taskName,startHour,endHour);
+                controller.createSimpleTask(taskName,startHour,endHour);
 
                 startHourField.setText("");
                 endHourField.setText("");
@@ -170,8 +173,8 @@ public class CreateTaskPanel extends JPanel {
             String taskName = complexTaskNameField.getText();
             ArrayList<Task> selectedTasks = getSelectedTasksFromList();
 
-            if(tasksManagement.isComplexTaskValid(taskName, selectedTasks)){
-                tasksManagement.createTask(taskName, selectedTasks);
+            if(controller.isComplexTaskValid(taskName, selectedTasks)){
+                controller.createComplexTask(taskName, selectedTasks);
                 selectedTasksModel.clear();
                 complexTaskNameField.setText("");
 
@@ -197,7 +200,7 @@ public class CreateTaskPanel extends JPanel {
         if(taskComboBox == null)
             return;
 
-        ArrayList<Task> availableTasks = tasksManagement.getUnassignedTasks();
+        ArrayList<Task> availableTasks = controller.getUnassignedTasks();
 
         DefaultComboBoxModel<Task> taskComboBoxModel = (DefaultComboBoxModel<Task>) taskComboBox.getModel();
         taskComboBoxModel.removeAllElements();

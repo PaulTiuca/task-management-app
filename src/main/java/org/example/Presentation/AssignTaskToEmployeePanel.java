@@ -1,17 +1,20 @@
-package org.example;
+package org.example.Presentation;
+
+import org.example.Business.Controller;
+import org.example.Data_Models.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
 public class AssignTaskToEmployeePanel extends JPanel {
-    private TasksManagement tasksManagement;
+    private Controller controller;
     private JPanel comboBoxPanel;
     private JComboBox<Task> taskComboBox;
     private JComboBox<Employee> employeeComboBox;
 
-    public AssignTaskToEmployeePanel(MainFrame parentFrame, TasksManagement tasksManagement){
-        this.tasksManagement = tasksManagement;
+    public AssignTaskToEmployeePanel(MainFrame parentFrame, Controller controller){
+        this.controller = controller;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         JPanel topMarginPanel = new JPanel();
@@ -30,8 +33,8 @@ public class AssignTaskToEmployeePanel extends JPanel {
 
         JButton confirmButton = new JButton("Confirm Assignation");
         JButton backButton = new JButton("Back to Main Menu");
-        App.configureButton(confirmButton);
-        App.configureButton(backButton);
+        AppUtility.configureButton(confirmButton);
+        AppUtility.configureButton(backButton);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -40,7 +43,7 @@ public class AssignTaskToEmployeePanel extends JPanel {
             Employee selectedEmployee = (Employee) employeeComboBox.getSelectedItem();
 
             if (selectedTask != null && selectedEmployee != null) {
-                tasksManagement.assignTaskToEmployee(selectedEmployee, selectedTask);
+                controller.assignTaskToEmployee(selectedEmployee, selectedTask);
 
                 DefaultComboBoxModel<Task> model = (DefaultComboBoxModel<Task>) taskComboBox.getModel();
                 model.removeElement(selectedTask);
@@ -61,7 +64,7 @@ public class AssignTaskToEmployeePanel extends JPanel {
     protected void createComboBoxes() {
         comboBoxPanel.removeAll();
 
-        ArrayList<Task> unassignedTasks = tasksManagement.getUnassignedTasks();
+        ArrayList<Task> unassignedTasks = controller.getUnassignedTasks();
         DefaultComboBoxModel<Task> taskComboBoxModel = new DefaultComboBoxModel<>();
         for (Task task : unassignedTasks) {
             taskComboBoxModel.addElement(task);
@@ -74,7 +77,7 @@ public class AssignTaskToEmployeePanel extends JPanel {
         comboBoxPanel.add(taskComboBox);
 
         DefaultComboBoxModel<Employee> employeeComboBoxModel = new DefaultComboBoxModel<>();
-        for (Employee employee : tasksManagement.getMap().keySet()) {
+        for (Employee employee : controller.getEmployeeTaskMap().keySet()) {
             employeeComboBoxModel.addElement(employee);
         }
 

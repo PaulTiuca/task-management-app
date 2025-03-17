@@ -1,8 +1,9 @@
-package org.example;
+package org.example.Data_Models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public final class ComplexTask extends Task {
+public final class ComplexTask extends Task implements Serializable  {
     private ArrayList<Task> includedTasks;
 
     public ComplexTask(String taskName, ArrayList<Task> includedTasks){
@@ -34,11 +35,7 @@ public final class ComplexTask extends Task {
     }
 
     public void deleteTask(Task task){
-        for(Task t : includedTasks)
-            if(t.equals(task)) {
-                includedTasks.remove(t);
-                t.setParentTask(null);
-            }
+        includedTasks.remove(task);
     }
 
     public ArrayList<Task> getIncludedTasks() {

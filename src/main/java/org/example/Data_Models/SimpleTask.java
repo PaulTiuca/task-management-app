@@ -1,6 +1,8 @@
-package org.example;
+package org.example.Data_Models;
 
-public final class SimpleTask extends Task{
+import java.io.Serializable;
+
+public final class SimpleTask extends Task implements Serializable {
     private int startHour;
     private int endHour;
 

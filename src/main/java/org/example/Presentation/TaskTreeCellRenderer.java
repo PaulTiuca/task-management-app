@@ -1,4 +1,6 @@
-package org.example;
+package org.example.Presentation;
+
+import org.example.Data_Models.Task;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -15,8 +17,7 @@ public class TaskTreeCellRenderer extends DefaultTreeCellRenderer {
         DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
         Object userObject = node.getUserObject();
 
-        if (userObject instanceof Task) {
-            Task task = (Task) userObject;
+        if (userObject instanceof Task task) {
             setText(task.getNameWithStatus());
         } else {
             setText(userObject.toString());

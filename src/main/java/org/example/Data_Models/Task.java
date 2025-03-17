@@ -1,6 +1,10 @@
-package org.example;
+package org.example.Data_Models;
 
-public sealed abstract class Task permits ComplexTask, SimpleTask {
+import java.io.Serializable;
+
+public sealed abstract class Task implements Serializable permits ComplexTask, SimpleTask {
+    private static final long serialVersionUID = 1L;
+
     private String status;
     private String taskName;
     private Task parentTask;

@@ -1,13 +1,16 @@
-package org.example;
+package org.example.Business;
+
+import org.example.Data_Models.ComplexTask;
+import org.example.Data_Models.Employee;
+import org.example.Data_Models.SimpleTask;
+import org.example.Data_Models.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Utility {
-    public static TasksManagement tasksManagement;
-
-    public static ArrayList<Employee> filterEmployees() {
+    public static ArrayList<Employee> filterEmployees(TasksManagement tasksManagement) {
         ArrayList<Employee> employees = new ArrayList<>();
         for(Employee e : tasksManagement.getMap().keySet())
             if(tasksManagement.calculateEmployeeWorkDuration(e) > 40)
@@ -17,7 +20,7 @@ public class Utility {
         return employees;
     }
 
-    public static Map<String, Map<String,Integer>> countTasks() {
+    public static Map<String, Map<String,Integer>> countTasks(TasksManagement tasksManagement) {
         Map<String, Map<String,Integer>> employeeTasksCount = new HashMap<>();
 
         for(Map.Entry<Employee, ArrayList<Task>> entry : tasksManagement.getMap().entrySet()){
@@ -49,5 +52,37 @@ public class Utility {
                 for(Task subTask : complexTask.getIncludedTasks())
                     countTasksRecursive(subTask, taskCount);
         }
+    }
+
+    public static boolean isEmployeeValid(String employeeName){
+        if(employeeName.isBlank())
+            return false;
+        return true;
+    }
+
+    public static boolean isSimpleTaskValid(String taskName, String startHourText, String endHourText){
+        if(taskName.isBlank() || startHourText.isBlank() || endHourText.isBlank())
+            return false;
+
+        try{
+            int startHour = Integer.parseInt(startHourText);
+            int endHour = Integer.parseInt(endHourText);
+
+            if(startHour < 0 || startHour > 24 || endHour < 0 || endHour > 24 || startHour >= endHour)
+                return false;
+
+        }
+        catch(NumberFormatException e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean isComplexTaskValid(String taskName, ArrayList<Task> includedTasks){
+        if(taskName.isBlank() || includedTasks.isEmpty())
+            return false;
+
+        return true;
     }
 }

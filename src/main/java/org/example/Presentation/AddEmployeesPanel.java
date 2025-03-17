@@ -1,10 +1,12 @@
-package org.example;
+package org.example.Presentation;
+
+import org.example.Business.Controller;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class AddEmployeesPanel extends JPanel {
-    public AddEmployeesPanel(MainFrame parentFrame, TasksManagement tasksManagement){
+    public AddEmployeesPanel(MainFrame parentFrame, Controller controller){
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         JPanel topMarginPanel = new JPanel();
@@ -21,17 +23,17 @@ public class AddEmployeesPanel extends JPanel {
 
         JButton confirmButton = new JButton("Add Employee");
         JButton backButton = new JButton("Back to Main Menu");
-        App.configureButton(confirmButton);
-        App.configureButton(backButton);
+        AppUtility.configureButton(confirmButton);
+        AppUtility.configureButton(backButton);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         confirmButton.addActionListener(e -> {
             String employeeName = employeeNameField.getText().trim();
 
-            if(tasksManagement.isEmployeeValid(employeeName)) {
+            if(controller.isEmployeeValid(employeeName)) {
                 JOptionPane.showMessageDialog(this, "The employee '" + employeeName + "' has been added succesfully!");
-                tasksManagement.addEmployee(employeeName);
+                controller.addEmployee(employeeName);
                 employeeNameField.setText("");
             }
             else
