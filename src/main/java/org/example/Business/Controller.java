@@ -1,7 +1,7 @@
 package org.example.Business;
 
-import org.example.Data_Models.Employee;
-import org.example.Data_Models.Task;
+import org.example.DataModels.Employee;
+import org.example.DataModels.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;

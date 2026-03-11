@@ -1,9 +1,9 @@
 package org.example.Business;
 
-import org.example.Data_Models.ComplexTask;
-import org.example.Data_Models.Employee;
-import org.example.Data_Models.SimpleTask;
-import org.example.Data_Models.Task;
+import org.example.DataModels.ComplexTask;
+import org.example.DataModels.Employee;
+import org.example.DataModels.SimpleTask;
+import org.example.DataModels.Task;
 
 import java.io.Serializable;
 import java.util.ArrayList;

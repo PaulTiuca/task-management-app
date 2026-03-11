@@ -1,4 +1,4 @@
-package org.example.Data_Models;
+package org.example.DataModels;
 
 import java.io.Serializable;
 import java.util.ArrayList;

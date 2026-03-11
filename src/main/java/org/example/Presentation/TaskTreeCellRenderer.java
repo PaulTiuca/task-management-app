@@ -1,6 +1,6 @@
 package org.example.Presentation;
 
-import org.example.Data_Models.Task;
+import org.example.DataModels.Task;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;

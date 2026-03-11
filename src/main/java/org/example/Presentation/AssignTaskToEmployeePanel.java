@@ -1,7 +1,7 @@
 package org.example.Presentation;
 
 import org.example.Business.Controller;
-import org.example.Data_Models.*;
+import org.example.DataModels.*;
 
 import javax.swing.*;
 import java.awt.*;
