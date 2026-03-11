@@ -58,7 +58,22 @@ src/
             ├── DataModels/      # Task, SimpleTask, ComplexTask, Employee
             ├── Presentation/    # Swing UI (MainFrame, panels, renderers)
             └── Main/            # Entry point
+docs/
+    ├── class-diagram.png
+    ├── use-case-diagram.png
+    └── package-diagram.png
 ```
+
+## Diagrams
+
+### Class Diagram
+![Class Diagram](docs/class-diagram.png)
+
+### Use Case Diagram
+![Use Case Diagram](docs/use-case-diagram.png)
+
+### Package Diagram
+![Package Diagram](docs/package-diagram.png)
 
 ## Design Patterns Used
 
